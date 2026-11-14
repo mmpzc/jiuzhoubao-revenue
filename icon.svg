@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="九州堡营收管家">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#be3a2a"/>
+      <stop offset="1" stop-color="#781b14"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe2a5"/>
+      <stop offset="1" stop-color="#d99a3e"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="116" fill="url(#bg)"/>
+  <circle cx="410" cy="98" r="92" fill="#ffffff" opacity=".06"/>
+  <circle cx="104" cy="430" r="128" fill="#ffffff" opacity=".04"/>
+  <path d="M111 211c7-56 69-99 145-99s138 43 145 99H111Z" fill="url(#gold)"/>
+  <path d="M117 225h278c11 0 19 9 19 19v22H98v-22c0-10 8-19 19-19Z" fill="#fff1cf"/>
+  <path d="M116 281h280v31c0 49-40 88-89 88H205c-49 0-89-39-89-88v-31Z" fill="url(#gold)"/>
+  <circle cx="183" cy="345" r="18" fill="#a32a1e" opacity=".78"/>
+  <circle cx="256" cy="345" r="18" fill="#a32a1e" opacity=".78"/>
+  <circle cx="329" cy="345" r="18" fill="#a32a1e" opacity=".78"/>
+  <path d="M150 187c20-24 58-38 106-38s86 14 106 38" fill="none" stroke="#fff3d8" stroke-width="15" stroke-linecap="round" opacity=".75"/>
+</svg>

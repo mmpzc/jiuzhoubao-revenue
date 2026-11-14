@@ -1,0 +1,21 @@
+{
+  "name": "九州堡营收管家",
+  "short_name": "营收管家",
+  "description": "九州堡汉堡店手机营收、扣点、推广费与经营净利记录工具",
+  "lang": "zh-CN",
+  "start_url": "./home.htm",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f5f0e7",
+  "theme_color": "#9f271d",
+  "categories": ["business", "finance", "productivity"],
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
