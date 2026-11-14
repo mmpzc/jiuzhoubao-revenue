@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#9f271d">
+  <meta name="description" content="九州堡手机营收记账工具：四渠道扣点、推广费、每日经营费用与净利自动计算。">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="九州堡营收">
+  <title>九州堡 · 营收管家</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head><body>
+  <div class="app-shell">
+    <header class="top-area">
+      <div class="brand-row">
+        <div class="brand-mark" aria-hidden="true">堡</div>
+        <div class="brand-copy">
+          <p class="eyebrow">JI UZHOU BAO · STORE</p>
+          <h1 id="storeTitle">九州堡营收管家</h1>
+        </div>
+        <div class="header-chip" id="headerChip">每日经营</div>
+      </div>
+      <div class="hero" aria-live="polite">
+        <div class="hero-meta">
+          <span class="hero-date"><i class="live-dot" aria-hidden="true"></i><span id="heroDate">今天</span></span>
+          <span id="heroStatus">正在读取记录</span>
+        </div>
+        <div class="hero-main">
+          <div>
+            <span class="hero-main-label">经营净利</span>
+            <strong class="hero-profit" id="heroProfit">¥0.00</strong>
+          </div>
+          <div class="profit-badge">净利率 <strong id="heroMargin">0%</strong></div>
+        </div>
+        <div class="hero-grid">
+          <div class="hero-stat"><span>营业额</span><b id="heroGross">¥0.00</b></div>
+          <div class="hero-stat"><span>平台到账</span><b id="heroNet">¥0.00</b></div>
+          <div class="hero-stat"><span>总支出</span><b id="heroExpense">¥0.00</b></div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="view" id="view-entry">
+        <div class="view-title-row">
+          <div>
+            <h2>每日记账</h2>
+            <p>录入当天营业额和费用，结果实时计算</p>
+          </div>
+        </div>
+
+        <div class="date-box">
+          <button class="date-arrow" id="prevDate" type="button" aria-label="前一天">‹</button>
+          <div class="date-input-wrap">
+            <label for="entryDate">记账日期</label>
+            <input class="date-input" id="entryDate" type="date">
+          </div>
+          <button class="date-arrow" id="nextDate" type="button" aria-label="后一天">›</button>
+          <button class="today-link" id="goToday" type="button">今天</button>
+        </div>
+
+        <div class="notice" id="configWarning" hidden>
+          <span class="notice-icon" aria-hidden="true">!</span>
+          <span>你还没有确认渠道扣点，目前会按 0% 计算。<button id="goSettingsFromNotice" type="button">现在设置</button></span>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <span class="section-kicker">REVENUE</span>
+              <h3>营业收入</h3>
+              <p>填写各平台当天实际营业额</p>
+            </div>
+          </div>
+          <div class="channel-list" id="channelList"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <span class="section-kicker">COST</span>
+              <h3>每日经营费用</h3>
+              <p>新建日期时会带入设置中的默认值，可单独修改</p>
+            </div>
+          </div>
+          <div class="expense-grid">
+            <label class="field">
+              <span>房租 <small id="rentHint">默认 0</small></span>
+              <input class="money-input" id="expenseRent" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+            </label>
+            <label class="field">
+              <span>人工 <small id="laborHint">默认 0</small></span>
+              <input class="money-input" id="expenseLabor" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+            </label>
+            <label class="field">
+              <span>水电 <small id="utilitiesHint">默认 0</small></span>
+              <input class="money-input" id="expenseUtilities" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+            </label>
+            <label class="field">
+              <span>其他 <small id="otherHint">默认 0</small></span>
+              <input class="money-input" id="expenseOther" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+            </label>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <span class="section-kicker">NOTE</span>
+              <h3>备注与结算</h3>
+              <p>可记录活动、异常退款或当天经营情况</p>
+            </div>
+          </div>
+          <label class="field">
+            <span>当天备注（选填）</span>
+            <textarea class="note-input" id="entryNote" maxlength="300" placeholder="例如：阴雨天气，晚高峰活动效果较好"></textarea>
+          </label>
+        </div>
+
+        <div class="card summary-card">
+          <div class="summary-lines">
+            <div class="summary-line"><span>平台扣点</span><b id="summaryFees">- ¥0.00</b></div>
+            <div class="summary-line"><span>平台推广费</span><b id="summaryPromo">- ¥0.00</b></div>
+            <div class="summary-line"><span>平台到账</span><b id="summaryNet">¥0.00</b></div>
+            <div class="summary-line"><span>每日经营费用</span><b id="summaryExpenses">- ¥0.00</b></div>
+            <div class="summary-line emphasis"><span>经营净利</span><b id="summaryProfit">¥0.00</b></div>
+          </div>
+          <p class="formula-note">经营净利 = 营业额 − 渠道扣点 − 推广费 − 房租/人工/水电等经营费用</p>
+          <div class="button-row" style="margin-top: 14px;">
+            <button class="secondary-button" id="copyDailyButton" type="button">复制日报</button>
+            <button class="primary-button" id="saveEntryButton" type="button">保存记录</button>
+          </div>
+          <button class="inline-danger" id="deleteEntryButton" type="button" hidden>删除当日记录</button>
+        </div>
+      </section>
+
+      <section class="view" id="view-history" hidden>
+        <div class="view-title-row">
+          <div>
+            <h2>经营明细</h2>
+            <p>按月回看每日营收与净利</p>
+          </div>
+          <button class="icon-button" id="exportMonthButton" type="button" aria-label="导出本月 CSV" title="导出本月 CSV">⇩</button>
+        </div>
+
+        <div class="card">
+          <label class="field" for="monthPicker">
+            <span>选择月份</span>
+            <input class="month-picker" id="monthPicker" type="month">
+          </label>
+          <div class="month-summary" style="margin-top: 13px;">
+            <div class="month-stat"><span>月营业额</span><b id="monthGross">¥0.00</b></div>
+            <div class="month-stat"><span>平台到账</span><b id="monthNet">¥0.00</b></div>
+            <div class="month-stat"><span>经营费用</span><b id="monthExpense">¥0.00</b></div>
+            <div class="month-stat wide"><span>月度经营净利</span><b id="monthProfit">¥0.00</b></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <span class="section-kicker">DAILY LOG</span>
+              <h3>每日记录</h3>
+              <p id="historyCount">本月暂无记录</p>
+            </div>
+          </div>
+          <div class="history-list" id="historyList"></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-settings" hidden>
+        <div class="view-title-row">
+          <div>
+            <h2>扣点与费用设置</h2>
+            <p>设置结果用于新记录，历史记录保留当时扣点</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="settings-group">
+            <h3 class="settings-group-title">店铺名称</h3>
+            <label class="field">
+              <span>页面显示名称</span>
+              <input class="plain-input" id="settingStoreName" maxlength="24" placeholder="九州堡营收管家">
+            </label>
+          </div>
+
+          <div class="settings-group">
+            <h3 class="settings-group-title">各渠道扣点</h3>
+            <div id="channelSettings"></div>
+            <p class="privacy-note">扣点请按平台/合同实际比例填写。固定扣费按“每个记账日”计算，仅当日该渠道有营业额时扣除。</p>
+          </div>
+
+          <div class="settings-group">
+            <h3 class="settings-group-title">每日固定费用默认值</h3>
+            <div class="expense-grid">
+              <label class="field">
+                <span>房租</span>
+                <input class="money-input" id="settingRent" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+              </label>
+              <label class="field">
+                <span>人工</span>
+                <input class="money-input" id="settingLabor" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+              </label>
+              <label class="field">
+                <span>水电</span>
+                <input class="money-input" id="settingUtilities" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+              </label>
+              <label class="field">
+                <span>其他</span>
+                <input class="money-input" id="settingOther" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+              </label>
+            </div>
+            <p class="privacy-note">如果是月租或月薪，可先换算成日均金额。例如月租 9,000 元，可按 30 天填写 300 元。</p>
+          </div>
+
+          <button class="primary-button" id="saveSettingsButton" type="button" style="margin-top: 18px;">保存设置</button>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <span class="section-kicker">DATA</span>
+              <h3>数据备份</h3>
+              <p>数据保存在当前手机的浏览器中，建议每周导出一次备份</p>
+            </div>
+          </div>
+          <div class="data-actions">
+            <button class="secondary-button" id="exportBackupButton" type="button">导出全部备份</button>
+            <button class="secondary-button" id="importBackupButton" type="button">导入备份</button>
+            <button class="secondary-button full" id="exportAllCsvButton" type="button">导出全部明细 CSV</button>
+            <button class="danger-button full" id="clearAllButton" type="button">清空全部数据</button>
+          </div>
+          <input class="hidden-file" id="importFile" type="file" accept="application/json,.json">
+          <p class="privacy-note">换手机、换浏览器或清理浏览器数据前，请先导出备份。导入备份会覆盖当前数据。</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <span class="section-kicker">ABOUT</span>
+              <h3>使用说明</h3>
+            </div>
+          </div>
+          <p class="privacy-note" style="font-size: 12px;">
+            1. 首次使用请先填写四个渠道的实际扣点和每日固定费用。<br>
+            2. “平台到账”是扣除渠道扣点与推广费后的金额；“经营净利”还要再扣除房租、人工、水电等。<br>
+            3. 淘宝闪购和美团的推广费按天单独填写。<br>
+            4. 保存后的历史记录会锁定当日扣点，之后修改设置不会改算旧账。<br>
+            5. 安装到手机桌面后，可像普通 App 一样打开并在离线时继续使用。
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="主导航">
+      <button class="nav-button active" type="button" data-view="entry">
+        <span class="nav-icon" aria-hidden="true">¥</span>
+        <span>记账</span>
+      </button>
+      <button class="nav-button" type="button" data-view="history">
+        <span class="nav-icon" aria-hidden="true">▦</span>
+        <span>明细</span>
+      </button>
+      <button class="nav-button" type="button" data-view="settings">
+        <span class="nav-icon" aria-hidden="true">⚙</span>
+        <span>设置</span>
+      </button>
+    </nav>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <input class="hidden-file" id="importFileDuplicate" type="file" accept="application/json,.json" tabindex="-1" aria-hidden="true">  <script src="./app-loader.js" defer></script>
+</body>
+</html>
